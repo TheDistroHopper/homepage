@@ -36,6 +36,16 @@ const bookmarks = [
       { name: "Google Scholar", url: "https://scholar.google.com/" },
     ],
   },
+  {
+    title: "Games",
+    links: [
+      { name: "Monkeytype", url: "https://monkeytype.com/" },
+      { name: "bonk.io", url: "https://bonk.io/" },
+      { name: "Chess", url: "https://www.chess.com/" },
+      { name: "skribbl", url: "https://skribbl.io/" },
+      { name: "zty.pe", url: "https://zty.pe/" },
+    ],
+  },
   // {
   //   title: "Reddit",
   //   links: [

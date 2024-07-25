@@ -26,6 +26,8 @@ const bookmarks = [
       { name: "ihavenotv", url: "https://ihavenotv.com/" },
       { name: "SFlix", url: "https://sflix.to/" },
       { name: "h!anime", url: "https://hianime.to/" },
+      { name: "Anime Filler List", url: "https://www.animefillerlist.com/" },
+      
     ],
   },
   {

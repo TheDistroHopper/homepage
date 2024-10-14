@@ -3,49 +3,33 @@ const bookmarks = [
   {
     title: "Feeds",
     links: [
-      { name: "Hacker News", url: "https://news.ycombinator.com" },
       { name: "GitHub", url: "https://github.com/explore" },
-      { name: "S/W Engineering Daily", url: "https://softwareengineeringdaily.com/" },
+      { name: "Hacker News", url: "https://news.ycombinator.com" },
+      { name: "Product Hunt", url: "https://www.producthunt.com/" },
+      { name: "Reddit", url: "https://www.reddit.com/"}
     ],
   },
   {
-    title: "Tools",
+    title: "Projects",
     links: [
-      { name: "Keep", url: "https://keep.google.com" },
-      { name: "Tasks", url: "https://calendar.google.com/calendar/u/0/r/tasks" },
-      { name: "Draw", url: "https://draw.sarve.sh/" },
-      { name: "ChatGPT", url: "https://chat.openai.com/" },
-      { name: "Gemini", url: "https://gemini.google.com" },
+      { name: "Django", url: "https://www.djangoproject.com/"},
+      { name: "Frappe", url: "https://frappeframework.com/" },
+      { name: "Motion Canvas", url: "https://motioncanvas.io/"},
+      { name: "SuprLab", url: "https://suprlab.in/" },
     ],
   },
   {
-    title: "Media",
+    title: "Scratchpad",
     links: [
-      { name: "Youtube", url: "https://youtube.com" },
-      { name: "Spotify", url: "https://open.spotify.com/" },
-      { name: "ihavenotv", url: "https://ihavenotv.com/" },
-      { name: "SFlix", url: "https://sflix.to/" },
-      { name: "h!anime", url: "https://hianime.to/" },
-      { name: "Anime Filler List", url: "https://www.animefillerlist.com/" },
+      { name: "Excalidraw", url: "https://excalidraw.com/"},
       
     ],
   },
   {
-    title: "Learning",
-    links: [
-      { name: "Roadmaps", url: "https://roadmap.sh" },
-      { name: "Sci-Hub", url: "https://sci-hub.se/" },
-      { name: "Google Scholar", url: "https://scholar.google.com/" },
-    ],
-  },
-  {
-    title: "Games",
+    title: "Misc",
     links: [
       { name: "Monkeytype", url: "https://monkeytype.com/" },
-      { name: "bonk.io", url: "https://bonk.io/" },
-      { name: "Chess", url: "https://www.chess.com/" },
-      { name: "skribbl", url: "https://skribbl.io/" },
-      { name: "zty.pe", url: "https://zty.pe/" },
+      { name: "Roadmaps", url: "https://roadmap.sh" }
     ],
   },
   // {

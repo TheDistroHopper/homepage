@@ -6,30 +6,34 @@ const bookmarks = [
       { name: "GitHub", url: "https://github.com/explore" },
       { name: "Hacker News", url: "https://news.ycombinator.com" },
       { name: "Product Hunt", url: "https://www.producthunt.com/" },
-      { name: "Reddit", url: "https://www.reddit.com/"}
-    ],
-  },
-  {
-    title: "Projects",
-    links: [
-      { name: "Django", url: "https://www.djangoproject.com/"},
-      { name: "Frappe", url: "https://frappeframework.com/" },
-      { name: "Motion Canvas", url: "https://motioncanvas.io/"},
-      { name: "SuprLab", url: "https://suprlab.in/" },
+      { name: "Indie Hackers", url: "https://www.indiehackers.com/"}
     ],
   },
   {
     title: "Scratchpad",
     links: [
+      { name: "Keep", url: "https://keep.google.com/"},
+      { name: "Tasks", url: "https://tasks.google.com/"},
       { name: "Excalidraw", url: "https://excalidraw.com/"},
       
     ],
   },
   {
-    title: "Misc",
+    title: "Learn",
+    links: [
+      { name: "Django", url: "https://www.djangoproject.com/"},
+      { name: "Frappe", url: "https://frappeframework.com/" },
+      { name: "Three.js", url: "https://threejs.org/" },
+      { name: "Roadmaps", url: "https://roadmap.sh" }
+    ],
+  },
+  {
+    title: "Practice",
     links: [
       { name: "Monkeytype", url: "https://monkeytype.com/" },
-      { name: "Roadmaps", url: "https://roadmap.sh" }
+      { name: "Leetcode", url: "https://monkeytype.com/" },
+      { name: "Codeforces", url:"https://codeforces.com/" },
+      { name: "SPOJ", url:"https://www.spoj.com/" }
     ],
   },
   // {

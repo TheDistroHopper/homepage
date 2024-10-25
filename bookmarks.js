@@ -19,20 +19,20 @@ const bookmarks = [
     ],
   },
   {
-    title: "Learn",
+    title: "Build",
     links: [
       { name: "Django", url: "https://www.djangoproject.com/"},
       { name: "Frappe", url: "https://frappeframework.com/" },
-      { name: "Three.js", url: "https://threejs.org/" },
-      { name: "Roadmaps", url: "https://roadmap.sh" }
+      { name: "Charm", url: "https://charm.sh/" },
+      
     ],
   },
   {
-    title: "Practice",
+    title: "Learn & Practice",
     links: [
-      { name: "Monkeytype", url: "https://monkeytype.com/" },
       { name: "Leetcode", url: "https://monkeytype.com/" },
-      { name: "Codeforces", url:"https://codeforces.com/" },
+      { name: "Monkeytype", url: "https://monkeytype.com/" },
+      { name: "Roadmaps", url: "https://roadmap.sh" },
       { name: "SPOJ", url:"https://www.spoj.com/" }
     ],
   },

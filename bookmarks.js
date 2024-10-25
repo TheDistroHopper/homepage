@@ -28,12 +28,11 @@ const bookmarks = [
     ],
   },
   {
-    title: "Learn & Practice",
+    title: "Practice",
     links: [
-      { name: "Leetcode", url: "https://monkeytype.com/" },
+      { name: "Leetcode", url: "https://leetcode.com/" },
       { name: "Monkeytype", url: "https://monkeytype.com/" },
-      { name: "Roadmaps", url: "https://roadmap.sh" },
-      { name: "SPOJ", url:"https://www.spoj.com/" }
+      { name: "Roadmaps", url: "https://roadmap.sh" }
     ],
   },
   // {

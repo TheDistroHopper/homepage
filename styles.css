@@ -122,6 +122,123 @@ body {
     margin-bottom: 0.5em;
 }
 
+/* Subtle bottom-right controls for custom links */
+#custom-links-controls {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    display: grid;
+    grid-auto-flow: row;
+    gap: 6px;
+    z-index: 10;
+    /* Establish containing block for absolutely-positioned buttons */
+    position: fixed;
+}
+.mi-btn {
+    background: rgba(39, 39, 39, 0.35);
+    border: none;
+    color: var(--secondaryFg);
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background 120ms ease, color 120ms ease, transform 120ms ease;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+.mi-btn .material-icons-outlined {
+    font-size: 18px;
+    line-height: 1;
+}
+.mi-btn:hover {
+    background: rgba(39, 39, 39, 0.6);
+    color: var(--fg);
+}
+.mi-btn:active {
+    transform: scale(0.95);
+}
+.mi-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.35);
+    outline-offset: 2px;
+}
+
+/* Collapsible actions behind a single gear toggle */
+.mi-gear { z-index: 1; }
+.mi-btn.action {
+    transform: translateY(0) scale(0.98);
+    opacity: 0;
+    pointer-events: none;
+}
+#custom-links-controls.open .mi-btn.action {
+    opacity: 1;
+    pointer-events: auto;
+}
+/* Staggered slide-up effect */
+.mi-btn.action[data-offset="1"] { transition-delay: 20ms; }
+.mi-btn.action[data-offset="2"] { transition-delay: 40ms; }
+.mi-btn.action[data-offset="3"] { transition-delay: 60ms; }
+.mi-btn.action[data-offset="4"] { transition-delay: 80ms; }
+
+#custom-links-controls .mi-btn.action {
+    transition: transform 160ms ease, opacity 160ms ease, background 120ms ease, color 120ms ease;
+}
+#custom-links-controls.open .mi-btn.action[data-offset="1"] { transform: translateY(-38px) scale(1); }
+#custom-links-controls.open .mi-btn.action[data-offset="2"] { transform: translateY(-76px) scale(1); }
+#custom-links-controls.open .mi-btn.action[data-offset="3"] { transform: translateY(-114px) scale(1); }
+#custom-links-controls.open .mi-btn.action[data-offset="4"] { transform: translateY(-152px) scale(1); }
+
+/* Theme popup */
+.theme-popup {
+    position: absolute;
+    right: 40px;
+    bottom: 0;
+    background: rgba(39,39,39,0.9);
+    color: var(--fg);
+    backdrop-filter: blur(4px);
+    border-radius: 6px;
+    padding: 8px 10px;
+    width: 210px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    transform: translateY(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 140ms ease, transform 140ms ease;
+}
+#custom-links-controls.open .theme-popup {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+.theme-popup:not(.visible) { display: none; }
+.theme-popup.visible { display: block; }
+.theme-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 6px 0;
+}
+.theme-label {
+    color: var(--secondaryFg);
+    font-size: 0.85rem;
+}
+.mini-btn {
+    background: rgba(255,255,255,0.06);
+    color: var(--secondaryFg);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-family: var(--fontFamily);
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+.mini-btn:hover { color: var(--fg); border-color: rgba(255,255,255,0.18); }
+
 @media only screen and (max-width: 600px) {
     .bookmark-set {
         flex-basis: 100%;

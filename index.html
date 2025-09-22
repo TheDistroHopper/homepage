@@ -8,6 +8,7 @@
     <title>Homepage</title>
     <link rel="stylesheet" href="styles.css" />
     <link href="favicon.png" rel="shortcut icon" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
   </head>
   <body>
     <div id="search">
@@ -20,6 +21,34 @@
     </div>
     <div class="container">
       <div id="clock"></div>
+      <div id="custom-links-controls" aria-label="Custom links controls">
+        <button id="background-edit-btn" class="mi-btn action" data-offset="4" type="button" aria-label="Change background" title="Change background">
+          <span class="material-icons-outlined">palette</span>
+        </button>
+        <button id="download-template-btn" class="mi-btn action" data-offset="3" type="button" aria-label="Download template" title="Download template">
+          <span class="material-icons-outlined">file_download</span>
+        </button>
+        <button id="upload-json-btn" class="mi-btn action" data-offset="2" type="button" aria-label="Upload JSON" title="Upload JSON">
+          <span class="material-icons-outlined">file_upload</span>
+        </button>
+        <button id="reset-links-btn" class="mi-btn action" data-offset="1" type="button" aria-label="Reset to default" title="Reset to default">
+          <span class="material-icons-outlined">restore</span>
+        </button>
+        <button id="settings-toggle-btn" class="mi-btn mi-gear" type="button" aria-label="Settings" title="Settings">
+          <span class="material-icons-outlined">settings</span>
+        </button>
+        <div id="theme-popup" class="theme-popup" aria-label="Background settings">
+          <div class="theme-row">
+            <span class="theme-label">Color</span>
+            <input id="bg-color-input" type="color" />
+          </div>
+          <div class="theme-row">
+            <button id="bg-image-upload-btn" class="mini-btn" type="button">Upload image</button>
+          </div>
+        </div>
+        <input id="upload-json-input" type="file" accept="application/json,.json" style="display:none" />
+        <input id="bg-image-input" type="file" accept="image/*" style="display:none" />
+      </div>
       <div id="bookmark-container"></div>
       <div id="reminder"></div>
     </div>
@@ -33,6 +62,51 @@
           var val = document.getElementById("search-field").value;
           window.open(searchUrl + val);
         }
+      }
+      // Helpers for custom bookmarks stored in localStorage
+      const LOCAL_STORAGE_KEY = "customBookmarks";
+      const BACKGROUND_STORAGE_KEY = "customBackground";
+
+      function escapeHtml(str) {
+        if (typeof str !== "string") return "";
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function isValidBookmarks(data) {
+        if (!Array.isArray(data)) return false;
+        return data.every(function (section) {
+          const hasTitle = section && typeof section.title === "string";
+          const hasLinks = Array.isArray(section.links);
+          if (!hasTitle || !hasLinks) return false;
+          return section.links.every(function (link) {
+            return (
+              link &&
+              typeof link.name === "string" &&
+              typeof link.url === "string"
+            );
+          });
+        });
+      }
+
+      function getStoredBookmarks() {
+        try {
+          const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+          if (!raw) return null;
+          const parsed = JSON.parse(raw);
+          return isValidBookmarks(parsed) ? parsed : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function getEffectiveBookmarks() {
+        // Prefer user-customized bookmarks from localStorage; fall back to defaults from bookmarks.js
+        return getStoredBookmarks() || bookmarks;
       }
       // Get current time and format
       function getTime() {
@@ -53,21 +127,197 @@
       // Handle writing out Bookmarks
       function setupBookmarks() {
         const bookmarkContainer = document.getElementById("bookmark-container");
-        bookmarkContainer.innerHTML = bookmarks
+        const data = getEffectiveBookmarks();
+        bookmarkContainer.innerHTML = data
           .map((b) => {
             const html = ["<div class='bookmark-set'>"];
-            html.push(`<div class="bookmark-title">${b.title}</div>`);
+            html.push(`<div class="bookmark-title">${escapeHtml(b.title)}</div>`);
             html.push('<div class="bookmark-inner-container">');
             html.push(
-              ...b.links.map(
-                (l) =>
-                  `<a class="bookmark" href="${l.url}" target="_blank">${l.name}</a>`
-              )
+              ...b.links.map(function (l) {
+                const name = escapeHtml(l.name);
+                const url = typeof l.url === "string" ? l.url : "#";
+                return `<a class="bookmark" href="${url}" target="_blank">${name}</a>`;
+              })
             );
             html.push("</div></div>");
             return html.join("");
           })
           .join("");
+      }
+
+      function setupCustomLinksControls() {
+        const container = document.getElementById("custom-links-controls");
+        const settingsBtn = document.getElementById("settings-toggle-btn");
+        const downloadBtn = document.getElementById("download-template-btn");
+        const uploadBtn = document.getElementById("upload-json-btn");
+        const resetBtn = document.getElementById("reset-links-btn");
+        const backgroundBtn = document.getElementById("background-edit-btn");
+        const fileInput = document.getElementById("upload-json-input");
+        const bgColorInput = document.getElementById("bg-color-input");
+        const bgImageInput = document.getElementById("bg-image-input");
+        const bgImageUploadBtn = document.getElementById("bg-image-upload-btn");
+        const themePopup = document.getElementById("theme-popup");
+
+        function toggleMenu() {
+          if (!container) return;
+          container.classList.toggle("open");
+        }
+
+        if (settingsBtn) {
+          settingsBtn.addEventListener("click", toggleMenu);
+        }
+
+        function downloadTemplate() {
+          try {
+            const defaultTemplate = JSON.stringify(bookmarks, null, 2);
+            const blob = new Blob([defaultTemplate], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "bookmarks-template.json";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          } catch (e) {
+            alert("Failed to download template.");
+          }
+        }
+
+        function handleFileChange(event) {
+          const file = event.target.files && event.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = function () {
+            try {
+              const json = JSON.parse(String(reader.result));
+              if (!isValidBookmarks(json)) {
+                alert(
+                  "Invalid file format. Expect an array of sections with title and links."
+                );
+                return;
+              }
+              localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(json));
+              setupBookmarks();
+              alert("Custom links saved. Using your uploaded links now.");
+            } catch (e) {
+              alert("Could not parse JSON file.");
+            } finally {
+              // Allow re-uploading the same file name later
+              fileInput.value = "";
+            }
+          };
+          reader.onerror = function () {
+            alert("Failed to read the selected file.");
+          };
+          reader.readAsText(file);
+        }
+
+        function resetToDefault() {
+          try {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            localStorage.removeItem(BACKGROUND_STORAGE_KEY);
+            // Reset background styles to theme defaults
+            document.body.style.backgroundImage = "";
+            document.body.style.backgroundSize = "";
+            document.body.style.backgroundPosition = "";
+            document.body.style.backgroundAttachment = "";
+            document.body.style.backgroundColor = "";
+            setupBookmarks();
+            alert("Reverted to default links.");
+          } catch (e) {
+            // no-op
+          }
+        }
+
+        if (downloadBtn) {
+          downloadBtn.addEventListener("click", downloadTemplate);
+        }
+        if (uploadBtn && fileInput) {
+          uploadBtn.addEventListener("click", function () {
+            fileInput.click();
+          });
+          fileInput.addEventListener("change", handleFileChange);
+        }
+        if (resetBtn) {
+          resetBtn.addEventListener("click", resetToDefault);
+        }
+
+        // Background handling
+        function applyBackgroundFromStorage() {
+          try {
+            const raw = localStorage.getItem(BACKGROUND_STORAGE_KEY);
+            if (!raw) return;
+            const cfg = JSON.parse(raw);
+            if (cfg && cfg.imageDataUrl) {
+              document.body.style.backgroundImage = `url(${cfg.imageDataUrl})`;
+              document.body.style.backgroundSize = "cover";
+              document.body.style.backgroundPosition = "center center";
+              document.body.style.backgroundAttachment = "fixed";
+            } else {
+              document.body.style.backgroundImage = "";
+            }
+            if (cfg && cfg.color) {
+              document.body.style.backgroundColor = cfg.color;
+            } else {
+              document.body.style.backgroundColor = "";
+            }
+          } catch (e) {
+            // ignore
+          }
+        }
+
+        function persistBackground(cfg) {
+          localStorage.setItem(BACKGROUND_STORAGE_KEY, JSON.stringify(cfg));
+          applyBackgroundFromStorage();
+        }
+
+        if (backgroundBtn && themePopup) {
+          backgroundBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            // Ensure menu is open so popup can be interacted with
+            if (!container.classList.contains("open")) container.classList.add("open");
+            themePopup.classList.toggle("visible");
+          });
+          document.addEventListener("click", function (e) {
+            if (!themePopup.classList.contains("visible")) return;
+            const within = themePopup.contains(e.target) || backgroundBtn.contains(e.target);
+            if (!within) themePopup.classList.remove("visible");
+          });
+        }
+        if (bgColorInput) {
+          bgColorInput.addEventListener("input", function (e) {
+            const value = e.target && e.target.value;
+            if (!value) return;
+            const cfg = { color: String(value), imageDataUrl: null };
+            persistBackground(cfg);
+          });
+        }
+        if (bgImageUploadBtn && bgImageInput) {
+          bgImageUploadBtn.addEventListener("click", function () {
+            bgImageInput.click();
+          });
+          bgImageInput.addEventListener("change", function (e) {
+            const file = e.target && e.target.files && e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function () {
+              const dataUrl = String(reader.result || "");
+              if (!dataUrl) return;
+              const cfg = { color: null, imageDataUrl: dataUrl };
+              persistBackground(cfg);
+              bgImageInput.value = "";
+            };
+            reader.onerror = function () {
+              alert("Failed to read image file.");
+            };
+            reader.readAsDataURL(file);
+          });
+        }
+
+        // Apply any saved background on init
+        applyBackgroundFromStorage();
       }
 
       // Set reminder
@@ -95,6 +345,7 @@
 
       window.onload = () => {
         setupBookmarks();
+        setupCustomLinksControls();
         // setupReminder();
         // Set up the clock
         document.getElementById("clock").innerHTML = getTime();

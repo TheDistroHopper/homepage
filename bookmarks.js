@@ -3,10 +3,9 @@ const bookmarks = [
   {
     title: "Feeds",
     links: [
-      { name: "GitHub", url: "https://github.com/explore" },
-      { name: "Hacker News", url: "https://news.ycombinator.com" },
-      { name: "Product Hunt", url: "https://www.producthunt.com/" },
-      { name: "Indie Hackers", url: "https://www.indiehackers.com/"}
+      { name: "GitHub", url: "https://github.com/trending" },
+      { name: "Tuxurls", url: "https://tuxurls.com/" },
+      { name: "Hacker News", url: "https://news.ycombinator.com" }
     ],
   },
   {
@@ -21,7 +20,7 @@ const bookmarks = [
   {
     title: "Build",
     links: [
-      { name: "Django", url: "https://www.djangoproject.com/"},
+      { name: "ADK", url: "https://github.com/google/adk-python"},
       { name: "Frappe", url: "https://frappeframework.com/" },
       { name: "Charm", url: "https://charm.sh/" },
       
